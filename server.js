@@ -1,5 +1,4 @@
 import app from "./src/app.js";
-import { customizeProfile } from "./src/controllers/customizeProfile.controller.js";
 import connectDB from "./src/database/db.js";
 import authRouter from "./src/routes/auth.route.js";
 import customizeRouter from "./src/routes/customizeProfile.route.js";
