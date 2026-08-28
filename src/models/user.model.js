@@ -31,13 +31,11 @@ const userSchema = new mongoose.Schema(
       select: false,
     },
     profileImage: {
-      url: String,
-      publicId: String,
+      type: String,
       default: "",
     },
     coverImage: {
-      url: String,
-      publicId: String,
+      type: String,
       default: "",
     },
     bio: {

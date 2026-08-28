@@ -1,4 +1,5 @@
 import { User } from "../models/user.model.js";
+import uploadOnCloudinary from "../services/Cloudinary.js";
 import { responseHandler } from "../utils/responseHandler.js";
 
 export const customizeProfile = async (req, res) => {
@@ -6,7 +7,10 @@ export const customizeProfile = async (req, res) => {
     const userId = req.params.id;
     console.log("User Id : ", userId);
 
-    const { username, fullname, bio, profileImage, coverImage } = req.body;
+    const { username, fullname, bio } = req.body;
+
+    const profileImage = req.files?.profileImage?.[0];
+    const coverImage = req.files?.coverImage?.[0];
 
     if (!userId) {
       return responseHandler({
@@ -26,12 +30,24 @@ export const customizeProfile = async (req, res) => {
       });
     }
 
+    const profileImageResponse = await uploadOnCloudinary(profileImage?.path);
+
+    // console.log("Profile Uploaded : ", profileImageResponse);
+
+    const coverImageResponse = await uploadOnCloudinary(coverImage?.path);
+
+    // console.log("Cover Image Uploaded : ", coverImageResponse);
+
     const updates = {
       ...(username !== undefined && { username }),
       ...(fullname !== undefined && { fullname }),
       ...(bio !== undefined && { bio }),
-      ...(profileImage !== undefined && { profileImage }),
-      ...(coverImage !== undefined && { coverImage }),
+      ...(profileImage !== undefined && {
+        profileImage: profileImageResponse.secure_url,
+      }),
+      ...(coverImage !== undefined && {
+        coverImage: coverImageResponse.secure_url,
+      }),
     };
 
     const user = await User.findByIdAndUpdate(userId, updates, {
