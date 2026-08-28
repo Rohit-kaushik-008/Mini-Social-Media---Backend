@@ -32,11 +32,11 @@ export const customizeProfile = async (req, res) => {
 
     const profileImageResponse = await uploadOnCloudinary(profileImage?.path);
 
-    // console.log("Profile Uploaded : ", profileImageResponse);
+    console.log("Profile Uploaded : ", profileImageResponse);
 
     const coverImageResponse = await uploadOnCloudinary(coverImage?.path);
 
-    // console.log("Cover Image Uploaded : ", coverImageResponse);
+    console.log("Cover Image Uploaded : ", coverImageResponse);
 
     const updates = {
       ...(username !== undefined && { username }),
