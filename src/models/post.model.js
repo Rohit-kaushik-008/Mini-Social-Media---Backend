@@ -8,6 +8,7 @@ const postSchema = new mongoose.Schema(
     },
     caption: {
       type: String,
+      required: true,
       maxlength: [100, "Caption should be less than 100 characters"],
     },
     author: {

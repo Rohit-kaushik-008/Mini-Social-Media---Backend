@@ -1,6 +1,6 @@
 import { User } from "../models/user.model.js";
 import uploadOnCloudinary from "../services/Cloudinary.js";
-import { responseHandler } from "../utils/responseHandler.js";
+import { errorHandler, responseHandler } from "../utils/responseHandler.js";
 
 export const customizeProfile = async (req, res) => {
   try {
@@ -56,7 +56,7 @@ export const customizeProfile = async (req, res) => {
       data: user,
     });
   } catch (error) {
-    return responseHandler({
+    return errorHandler({
       res,
       statusCode: 500,
       message: "Something went Wrong!",
