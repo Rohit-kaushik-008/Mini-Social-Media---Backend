@@ -146,3 +146,35 @@ export const updatePost = async (req, res) => {
     });
   }
 };
+
+export const getPost = async (req, res) => {
+  try {
+    const postId = req.params.id;
+
+    const post = await Post.findOne({
+      _id: postId,
+    });
+
+    if (!post) {
+      return responseHandler({
+        res,
+        statusCode: 404,
+        message: "Post not found",
+      });
+    }
+
+    return responseHandler({
+      res,
+      statusCode: 200,
+      message: "Post Fetched Successfully",
+      data: post,
+    });
+  } catch (error) {
+    return errorHandler({
+      res,
+      statusCode: 500,
+      message: "Something went wrong",
+      error: error.message,
+    });
+  }
+};
