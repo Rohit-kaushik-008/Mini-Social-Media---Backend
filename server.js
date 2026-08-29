@@ -3,12 +3,14 @@ import connectDB from "./src/database/db.js";
 import authRouter from "./src/routes/auth.route.js";
 import customizeRouter from "./src/routes/customizeProfile.route.js";
 import postRouter from "./src/routes/post.route.js";
+import followRouter from "./src/routes/follow.route.js"
 
 const port = process.env.PORT || 8000;
 
 app.use("/api/auth", authRouter);
 app.use("/user/customize", customizeRouter);
 app.use("/user/profile", postRouter);
+app.use("/api/user", followRouter)
 
 connectDB()
   .then(() => {
