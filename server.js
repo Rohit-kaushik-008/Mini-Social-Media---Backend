@@ -5,6 +5,7 @@ import customizeRouter from "./src/routes/customizeProfile.route.js";
 import postRouter from "./src/routes/post.route.js";
 import followRouter from "./src/routes/follow.route.js";
 import likeRouter from "./src/routes/like.route.js"
+import commentRouter from "./src/routes/comment.route.js"
 
 const port = process.env.PORT || 8000;
 
@@ -13,6 +14,7 @@ app.use("/user/customize", customizeRouter);
 app.use("/user/profile", postRouter);
 app.use("/user/profile", followRouter);
 app.use("/user/post", likeRouter);
+app.use("/user/post", commentRouter)
 
 connectDB()
   .then(() => {
