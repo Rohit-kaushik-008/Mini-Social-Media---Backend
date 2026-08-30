@@ -5,6 +5,7 @@ import { errorHandler, responseHandler } from "../utils/responseHandler.js";
 export const customizeProfile = async (req, res) => {
   try {
     const userId = req.params.id;
+    const loggedInUserId = req.userId;
 
     const { username, fullname, bio } = req.body;
 
@@ -16,6 +17,14 @@ export const customizeProfile = async (req, res) => {
         res,
         statusCode: 400,
         message: "User Id Required",
+      });
+    }
+
+    if (userId !== loggedInUserId) {
+      return responseHandler({
+        res,
+        statusCode: 402,
+        message: "You aren't authorized to change profile",
       });
     }
 

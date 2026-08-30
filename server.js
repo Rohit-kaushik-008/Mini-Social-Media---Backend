@@ -7,6 +7,7 @@ import followRouter from "./src/routes/follow.route.js";
 import likeRouter from "./src/routes/like.route.js";
 import commentRouter from "./src/routes/comment.route.js";
 import feedRouter from "./src/routes/feed.route.js";
+import searchRouter from "./src/routes/search.route.js";
 
 const port = process.env.PORT || 8000;
 
@@ -17,6 +18,7 @@ app.use("/user/profile", followRouter);
 app.use("/user/post", likeRouter);
 app.use("/user/post", commentRouter);
 app.use("/user/feed", feedRouter);
+app.use("/api/search", searchRouter);
 
 connectDB()
   .then(() => {

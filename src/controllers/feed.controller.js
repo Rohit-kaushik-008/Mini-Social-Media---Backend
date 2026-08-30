@@ -12,7 +12,7 @@ export const getFeed = async (req, res) => {
 
     const followingIds = following.map((follow) => follow.following);
 
-    const limit = 2;
+    const limit = req.query.limit;
     const page = req.query.page;
     const skip = (page - 1) * limit;
 
