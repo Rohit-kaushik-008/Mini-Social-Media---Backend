@@ -113,7 +113,7 @@ export const userLogin = async (req, res) => {
       res,
       statusCode: 200,
       message: "User Loggined Successfully",
-      user,
+      data: user,
     });
   } catch (error) {
     return responseHandler({
