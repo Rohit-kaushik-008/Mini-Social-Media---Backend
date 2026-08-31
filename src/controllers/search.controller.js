@@ -31,7 +31,7 @@ export const searchUser = async (req, res) => {
         },
       },
       {
-        $limit: 2,
+        $limit: 5,
       },
     ]);
 

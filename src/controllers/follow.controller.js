@@ -1,4 +1,5 @@
 import { Follow } from "../models/follow.model.js";
+import { Post } from "../models/post.model.js";
 import { User } from "../models/user.model.js";
 import { errorHandler, responseHandler } from "../utils/responseHandler.js";
 
@@ -103,6 +104,44 @@ export const unfollowUser = async (req, res) => {
       statusCode: 200,
       message: "Unfollow user successfully",
       data: follow,
+    });
+  } catch (error) {
+    return errorHandler({
+      res,
+      statusCode: 500,
+      message: "Something went wrong!",
+      error: error.message,
+    });
+  }
+};
+
+export const getProfileStats = async (req, res) => {
+  try {
+    const userId = req.userId;
+
+    const followers = await Follow.countDocuments({
+      following: userId,
+    });
+
+    const following = await Follow.countDocuments({
+      follower: userId,
+    });
+
+    const posts = await Post.countDocuments({
+      author: userId,
+    });
+
+    const stats = {
+      followersCount: followers,
+      followingCount: following,
+      postsCount: posts,
+    };
+
+    return responseHandler({
+      res,
+      statusCode: 200,
+      message: "User's Profile Stats fetched successfully",
+      data: stats,
     });
   } catch (error) {
     return errorHandler({
