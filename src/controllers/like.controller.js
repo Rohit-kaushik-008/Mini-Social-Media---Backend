@@ -106,3 +106,47 @@ export const unlikePost = async (req, res) => {
     });
   }
 };
+
+export const getLikeCount = async (req, res) => {
+  try {
+    const postId = req.params.id;
+
+    const post = await Post.findOne({
+      _id: postId,
+    });
+
+    if (!post) {
+      return responseHandler({
+        res,
+        statusCode: 404,
+        message: "Post not found",
+      });
+    }
+
+    const likeCount = await Like.countDocuments({
+      post: postId,
+    });
+
+    if (likeCount <= 0) {
+      return responseHandler({
+        res,
+        statusCode: 200,
+        message: "Post haven't any like",
+      });
+    }
+
+    return responseHandler({
+      res,
+      statusCode: 200,
+      message: "Like Count Fetched Successfully",
+      data: likeCount,
+    });
+  } catch (error) {
+    return errorHandler({
+      res,
+      statusCode: 500,
+      message: "Something went wrong!",
+      error: error.message,
+    });
+  }
+};

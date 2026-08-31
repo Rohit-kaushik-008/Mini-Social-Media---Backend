@@ -82,3 +82,47 @@ export const uncommentPost = async (req, res) => {
     });
   }
 };
+
+export const getCommentCount = async (req, res) => {
+  try {
+    const postId = req.params.id;
+
+    const post = await Post.findOne({
+      _id: postId,
+    });
+
+    if (!post) {
+      return responseHandler({
+        res,
+        statusCode: 404,
+        message: "Post not found",
+      });
+    }
+
+    const commentCount = await Comment.countDocuments({
+      post: postId,
+    });
+
+    if (commentCount <= 0) {
+      return responseHandler({
+        res,
+        statusCode: 200,
+        message: "Post haven't any Comment",
+      });
+    }
+
+    return responseHandler({
+      res,
+      statusCode: 200,
+      message: "Comment Count Fetched Successfully",
+      data: commentCount,
+    });
+  } catch (error) {
+    return errorHandler({
+      res,
+      statusCode: 500,
+      message: "Something went wrong!",
+      error: error.message,
+    });
+  }
+};
