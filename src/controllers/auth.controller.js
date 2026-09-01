@@ -49,8 +49,6 @@ export const userRegister = async (req, res) => {
   } catch (error) {
     return errorHandler({
       res,
-      statusCode: 500,
-      message: "Something went Wrong",
       error: error.message,
     });
   }
@@ -118,8 +116,6 @@ export const userLogin = async (req, res) => {
   } catch (error) {
     return responseHandler({
       res,
-      statusCode: 500,
-      message: "something went wrong",
       error: error.message,
     });
   }
@@ -137,8 +133,6 @@ export const userLogout = async (req, res) => {
   } catch (error) {
     return errorHandler({
       res,
-      statusCode: 500,
-      message: "Something went wrong!",
       error: error.message,
     });
   }

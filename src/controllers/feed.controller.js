@@ -32,8 +32,6 @@ export const getFeed = async (req, res) => {
   } catch (error) {
     return errorHandler({
       res,
-      statusCode: 500,
-      message: "Something went wrong!",
       error: error.message,
     });
   }

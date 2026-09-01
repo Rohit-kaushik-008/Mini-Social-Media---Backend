@@ -42,8 +42,6 @@ export const createPost = async (req, res) => {
   } catch (error) {
     return errorHandler({
       res,
-      statusCode: 500,
-      message: "something went wrong!",
       error: error.message,
     });
   }
@@ -66,8 +64,6 @@ export const getAllPosts = async (req, res) => {
   } catch (error) {
     return errorHandler({
       res,
-      statusCode: 500,
-      message: "Something went wrong!",
       error: error.message,
     });
   }
@@ -101,8 +97,6 @@ export const deletePost = async (req, res) => {
   } catch (error) {
     return errorHandler({
       res,
-      statusCode: 500,
-      message: "Something went wrong!",
       error: error.message,
     });
   }
@@ -140,8 +134,6 @@ export const updatePost = async (req, res) => {
   } catch (error) {
     return errorHandler({
       res,
-      statusCode: 500,
-      message: "Something went wrong",
       errro: error.message,
     });
   }
@@ -172,8 +164,6 @@ export const getPost = async (req, res) => {
   } catch (error) {
     return errorHandler({
       res,
-      statusCode: 500,
-      message: "Something went wrong",
       error: error.message,
     });
   }

@@ -55,8 +55,6 @@ export const followUser = async (req, res) => {
   } catch (error) {
     return errorHandler({
       res,
-      statusCode: 500,
-      message: "Something went wrong!",
       error: error.message,
     });
   }
@@ -108,8 +106,6 @@ export const unfollowUser = async (req, res) => {
   } catch (error) {
     return errorHandler({
       res,
-      statusCode: 500,
-      message: "Something went wrong!",
       error: error.message,
     });
   }
@@ -146,8 +142,6 @@ export const getProfileStats = async (req, res) => {
   } catch (error) {
     return errorHandler({
       res,
-      statusCode: 500,
-      message: "Something went wrong!",
       error: error.message,
     });
   }

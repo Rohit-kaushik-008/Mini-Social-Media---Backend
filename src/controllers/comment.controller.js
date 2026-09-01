@@ -44,8 +44,7 @@ export const commentPost = async (req, res) => {
   } catch (error) {
     return errorHandler({
       res,
-      statusCode: 500,
-      message: "Something went Wrong",
+      error: error.message,
     });
   }
 };
@@ -77,8 +76,7 @@ export const uncommentPost = async (req, res) => {
   } catch (error) {
     return errorHandler({
       res,
-      statusCode: 500,
-      message: "Something went Wrong",
+      error: error.message,
     });
   }
 };
@@ -120,8 +118,6 @@ export const getCommentCount = async (req, res) => {
   } catch (error) {
     return errorHandler({
       res,
-      statusCode: 500,
-      message: "Something went wrong!",
       error: error.message,
     });
   }

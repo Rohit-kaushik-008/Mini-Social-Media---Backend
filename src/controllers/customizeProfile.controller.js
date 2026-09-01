@@ -67,8 +67,6 @@ export const customizeProfile = async (req, res) => {
   } catch (error) {
     return errorHandler({
       res,
-      statusCode: 500,
-      message: "Something went Wrong!",
       error: error.message,
     });
   }
