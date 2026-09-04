@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       unique: true,
       sparse: true,
-      maxlength: [15, "username should contain less than 15 characters"],
+      maxLength: [15, "username should contain less than 15 characters"],
     },
     email: {
       type: String,
@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "Password is required for creating an account."],
-      minlength: [6, "Password should contain more than 6 characters"],
+      minLength: [6, "Password should contain more than 6 characters"],
       select: false,
     },
     profileImage: {
