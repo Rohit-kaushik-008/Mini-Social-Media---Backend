@@ -111,38 +111,3 @@ export const unfollowUser = async (req, res) => {
   }
 };
 
-export const getProfileStats = async (req, res) => {
-  try {
-    const userId = req.userId;
-
-    const followers = await Follow.countDocuments({
-      following: userId,
-    });
-
-    const following = await Follow.countDocuments({
-      follower: userId,
-    });
-
-    const posts = await Post.countDocuments({
-      author: userId,
-    });
-
-    const stats = {
-      followersCount: followers,
-      followingCount: following,
-      postsCount: posts,
-    };
-
-    return responseHandler({
-      res,
-      statusCode: 200,
-      message: "User's Profile Stats fetched successfully",
-      data: stats,
-    });
-  } catch (error) {
-    return errorHandler({
-      res,
-      error: error.message,
-    });
-  }
-};
