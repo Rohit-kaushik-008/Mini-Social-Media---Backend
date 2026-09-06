@@ -1,6 +1,7 @@
 import { Post } from "../models/post.model.js";
 import uploadOnCloudinary from "../services/Cloudinary.js";
 import { responseHandler, errorHandler } from "../utils/responseHandler.js";
+import mongoose from "mongoose";
 
 // Create Post Controller
 export const createPost = async (req, res) => {
@@ -52,9 +53,47 @@ export const getAllPosts = async (req, res) => {
   try {
     const userId = req.userId;
 
-    const posts = await Post.find({
-      author: userId,
-    });
+    const posts = await Post.aggregate([
+      {
+        $match: {
+          author: new mongoose.Types.ObjectId(userId),
+        },
+      },
+      {
+        $lookup: {
+          from: "likes",
+          localField: "_id",
+          foreignField: "post",
+          as: "likes",
+        },
+      },
+      {
+        $lookup: {
+          from: "comments",
+          localField: "_id",
+          foreignField: "post",
+          as: "comments",
+        },
+      },
+      {
+        $addFields: {
+          likesCount: {
+            $size: "$likes",
+          },
+          commentsCount: {
+            $size: "$comments",
+          },
+          isLiked: {
+            $cond: {
+              if: { $in: [req.userId?._id, "$likes.author"] },
+              then: true,
+              else: false,
+            },
+          },
+        },
+      },
+    ]);
+
     return responseHandler({
       res,
       statusCode: 200,
