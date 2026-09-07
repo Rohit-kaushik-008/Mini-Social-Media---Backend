@@ -16,12 +16,67 @@ export const getFeed = async (req, res) => {
     const page = req.query.page;
     const skip = (page - 1) * limit;
 
-    const feed = await Post.find({
-      author: { $in: followingIds },
-    })
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
+    const feed = await Post.aggregate([
+      {
+        $match: {
+          author: { $in: followingIds },
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          pipeline: [
+            {
+              $project: {
+                _id: 0,
+                username: 1,
+                fullname: 1,
+                profileImage: 1,
+              },
+            },
+          ],
+          as: "authorInfo",
+        },
+      },
+      {
+        $lookup: {
+          from: "likes",
+          localField: "_id",
+          foreignField: "post",
+          as: "likes",
+        },
+      },
+      {
+        $lookup: {
+          from: "comments",
+          localField: "_id",
+          foreignField: "post",
+          as: "comments",
+        },
+      },
+      {
+        $addFields: {
+          likesCount: {
+            $size: "$likes",
+          },
+          commentsCount: {
+            $size: "$comments",
+          },
+          isLiked: {
+            $cond: {
+              if: { $in: [req.userId?._id, "$likes.author"] },
+              then: true,
+              else: false,
+            },
+          },
+        },
+      },
+      {
+        $unwind: "$authorInfo",
+      },
+    ]);
 
     return responseHandler({
       res,
