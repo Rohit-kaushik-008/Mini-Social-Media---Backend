@@ -30,8 +30,12 @@ export const getProfileStats = async (req, res) => {
     });
 
     const profileData = {
-      avatar: user?.profileImage || "",
-      banner: user?.coverImage || "",
+      avatar:
+        user?.profileImage ||
+        "https://i.pinimg.com/736x/ce/ec/3d/ceec3ddfd13c0cd9374e499fbaa2119f.jpg",
+      banner:
+        user?.coverImage ||
+        "https://i.pinimg.com/736x/4b/2f/24/4b2f2469ea47ac0ae3074b013551f3e3.jpg",
       username: user?.username || "",
       fullname: user?.fullname || "",
       bio: user?.bio || "",
