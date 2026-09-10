@@ -4,6 +4,6 @@ import { getProfileStats } from "../controllers/profile.controller.js";
 
 const router = express.Router();
 
-router.get("/data", authMiddleware, getProfileStats);
+router.get("/data/:id", authMiddleware, getProfileStats);
 
 export default router;

@@ -5,7 +5,7 @@ import { responseHandler, errorHandler } from "../utils/responseHandler.js";
 
 export const getProfileStats = async (req, res) => {
   try {
-    const userId = req.userId;
+    const userId = req.params.id;
 
     const user = await User.findById(userId);
 
