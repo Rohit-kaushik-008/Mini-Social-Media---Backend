@@ -35,7 +35,7 @@ export const getProfileStats = async (req, res) => {
         "https://i.pinimg.com/736x/ce/ec/3d/ceec3ddfd13c0cd9374e499fbaa2119f.jpg",
       banner:
         user?.coverImage ||
-        "https://i.pinimg.com/736x/4b/2f/24/4b2f2469ea47ac0ae3074b013551f3e3.jpg",
+        "https://i.pinimg.com/736x/1f/bc/4a/1fbc4a835a75f11145c690f7f38be2c2.jpg",
       username: user?.username || "",
       fullname: user?.fullname || "",
       bio: user?.bio || "",
