@@ -51,7 +51,7 @@ export const createPost = async (req, res) => {
 // Get all Post Controller
 export const getAllPosts = async (req, res) => {
   try {
-    const userId = req.userId;
+    const userId = req.params.id; 
 
     const posts = await Post.aggregate([
       {
