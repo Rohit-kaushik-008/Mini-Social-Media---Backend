@@ -1,10 +1,13 @@
 import { Follow } from "../models/follow.model.js";
 import { Post } from "../models/post.model.js";
 import { errorHandler, responseHandler } from "../utils/responseHandler.js";
+import mongoose from "mongoose";
 
 export const getFeed = async (req, res) => {
   try {
     const userId = req.userId;
+    console.log("userId:", req.userId);
+    console.log("type:", typeof req.userId);
 
     const following = await Follow.find({
       follower: userId,
@@ -12,16 +15,14 @@ export const getFeed = async (req, res) => {
 
     const followingIds = following.map((follow) => follow.following);
 
-    const limit = req.query.limit;
-    const page = req.query.page;
-    const skip = (page - 1) * limit;
-
     const feed = await Post.aggregate([
+      // match users
       {
         $match: {
           author: { $in: followingIds },
         },
       },
+      // user info
       {
         $lookup: {
           from: "users",
@@ -40,6 +41,7 @@ export const getFeed = async (req, res) => {
           as: "authorInfo",
         },
       },
+      // like count
       {
         $lookup: {
           from: "likes",
@@ -48,6 +50,7 @@ export const getFeed = async (req, res) => {
           as: "likes",
         },
       },
+      // comment count
       {
         $lookup: {
           from: "comments",
@@ -56,6 +59,27 @@ export const getFeed = async (req, res) => {
           as: "comments",
         },
       },
+      // find that like object present or not
+      {
+        $lookup: {
+          from: "likes",
+          let: { postId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$post", "$$postId"] },
+                    { $eq: ["$author", new mongoose.Types.ObjectId(userId)] },
+                  ],
+                },
+              },
+            },
+          ],
+          as: "userLike",
+        },
+      },
+      // adding important fields
       {
         $addFields: {
           likesCount: {
@@ -65,11 +89,7 @@ export const getFeed = async (req, res) => {
             $size: "$comments",
           },
           isLiked: {
-            $cond: {
-              if: { $in: [req.userId?._id, "$likes.author"] },
-              then: true,
-              else: false,
-            },
+            $gt: [{ $size: "$userLike" }, 0],
           },
         },
       },

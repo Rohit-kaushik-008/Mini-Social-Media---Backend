@@ -9,7 +9,7 @@ const postSchema = new mongoose.Schema(
     caption: {
       type: String,
       required: true,
-      maxlength: [100, "Caption should be less than 100 characters"],
+      maxlength: [500, "Caption should be less than 100 characters"],
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,

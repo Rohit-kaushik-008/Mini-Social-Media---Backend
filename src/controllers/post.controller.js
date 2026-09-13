@@ -51,12 +51,13 @@ export const createPost = async (req, res) => {
 // Get all Post Controller
 export const getAllPosts = async (req, res) => {
   try {
-    const userId = req.params.id; 
+    const userId = new mongoose.Types.ObjectId(req.userId);
+    const profileId = new mongoose.Types.ObjectId(req.params.id);
 
     const posts = await Post.aggregate([
       {
         $match: {
-          author: new mongoose.Types.ObjectId(userId),
+          author: profileId,
         },
       },
       {
@@ -76,6 +77,25 @@ export const getAllPosts = async (req, res) => {
         },
       },
       {
+        $lookup: {
+          from: "likes",
+          let: { postId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$post", "$$postId"] },
+                    { $eq: ["$author", userId] },
+                  ],
+                },
+              },
+            },
+          ],
+          as: "userLike",
+        },
+      },
+      {
         $addFields: {
           likesCount: {
             $size: "$likes",
@@ -84,11 +104,7 @@ export const getAllPosts = async (req, res) => {
             $size: "$comments",
           },
           isLiked: {
-            $cond: {
-              if: { $in: [req.userId?._id, "$likes.author"] },
-              then: true,
-              else: false,
-            },
+            $gt: [{ $size: "$userLike" }, 0],
           },
         },
       },
