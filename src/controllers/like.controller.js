@@ -46,6 +46,7 @@ export const likePost = async (req, res) => {
       data: like,
     });
   } catch (error) {
+    console.log("Like Error : ", error)
     return errorHandler({
       res,
       error: error.message,
