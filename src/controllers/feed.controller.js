@@ -6,8 +6,6 @@ import mongoose from "mongoose";
 export const getFeed = async (req, res) => {
   try {
     const userId = req.userId;
-    console.log("userId:", req.userId);
-    console.log("type:", typeof req.userId);
 
     const following = await Follow.find({
       follower: userId,

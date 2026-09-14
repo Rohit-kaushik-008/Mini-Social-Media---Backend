@@ -1,5 +1,4 @@
 import { Follow } from "../models/follow.model.js";
-import { Post } from "../models/post.model.js";
 import { User } from "../models/user.model.js";
 import { errorHandler, responseHandler } from "../utils/responseHandler.js";
 

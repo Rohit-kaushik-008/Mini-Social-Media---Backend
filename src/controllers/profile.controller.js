@@ -5,9 +5,10 @@ import { responseHandler, errorHandler } from "../utils/responseHandler.js";
 
 export const getProfileStats = async (req, res) => {
   try {
-    const userId = req.params.id;
+    const userId = req.userId;
+    const profileId = req.params.id;
 
-    const user = await User.findById(userId);
+    const user = await User.findById(profileId);
 
     if (!user) {
       return responseHandler({
@@ -18,15 +19,15 @@ export const getProfileStats = async (req, res) => {
     }
 
     const followers = await Follow.countDocuments({
-      following: userId,
+      following: profileId,
     });
 
     const following = await Follow.countDocuments({
-      follower: userId,
+      follower: profileId,
     });
 
     const posts = await Post.countDocuments({
-      author: userId,
+      author: profileId,
     });
 
     const profileData = {
@@ -47,11 +48,16 @@ export const getProfileStats = async (req, res) => {
       postsCount: posts,
     };
 
+    const isFollow = await Follow.findOne({
+      follower: userId,
+      following: profileId,
+    });
+
     return responseHandler({
       res,
       statusCode: 200,
       message: "User's Profile Stats fetched successfully",
-      data: { profileData, stats },
+      data: { profileData, stats, isFollow },
     });
   } catch (error) {
     return errorHandler({
