@@ -1,6 +1,7 @@
 import { Comment } from "../models/comment.model.js";
 import { Post } from "../models/post.model.js";
 import { errorHandler, responseHandler } from "../utils/responseHandler.js";
+import mongoose from "mongoose";
 
 export const commentPost = async (req, res) => {
   try {
@@ -114,6 +115,54 @@ export const getCommentCount = async (req, res) => {
       statusCode: 200,
       message: "Comment Count Fetched Successfully",
       data: commentCount,
+    });
+  } catch (error) {
+    return errorHandler({
+      res,
+      error: error.message,
+    });
+  }
+};
+
+export const getPostComments = async (req, res) => {
+  try {
+    const postId = new mongoose.Types.ObjectId(req.params.id);
+
+    const detail = await Comment.aggregate([
+      {
+        $match: { post: postId },
+      },
+      {
+        $lookup: {
+          from: "users",
+          foreignField: "_id",
+          localField: "author",
+          as: "users",
+        },
+      },
+      {
+        $unwind: "$users",
+      },
+      {
+        $addFields: {
+          profileImage: "$user.profileImage",
+          username: "$user.username",
+        },
+      },
+      {
+        $project: {
+          content: 1,
+          "users.profileImage": 1,
+          "users.username": 1,
+        },
+      },
+    ]);
+
+    return responseHandler({
+      res,
+      statusCode: 200,
+      message: "Comment fetched Successfully",
+      data: detail,
     });
   } catch (error) {
     return errorHandler({
