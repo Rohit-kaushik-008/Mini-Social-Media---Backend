@@ -152,6 +152,7 @@ export const getPostComments = async (req, res) => {
       {
         $project: {
           content: 1,
+          author: 1,
           "users.profileImage": 1,
           "users.username": 1,
         },
