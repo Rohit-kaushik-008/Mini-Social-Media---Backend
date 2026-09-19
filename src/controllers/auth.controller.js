@@ -38,6 +38,8 @@ export const userRegister = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
+      secure: true,
+      sameSite: "none",
     });
 
     return responseHandler({
@@ -59,8 +61,6 @@ export const userLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // console.log("Email : ", email, "Password : ", password);
-
     if (!email?.trim() || !password?.trim()) {
       return responseHandler({
         res,
@@ -73,8 +73,6 @@ export const userLogin = async (req, res) => {
       email,
     }).select("+password");
 
-    // console.log("User : ", user);
-
     if (!user) {
       return responseHandler({
         res,
@@ -83,11 +81,7 @@ export const userLogin = async (req, res) => {
       });
     }
 
-    // console.log("Not user");
-
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
-
-    // console.log("Is Password Correct ? : ", isPasswordCorrect);
 
     if (!isPasswordCorrect) {
       return responseHandler({
@@ -99,13 +93,11 @@ export const userLogin = async (req, res) => {
 
     const token = JWT.sign({ userId: user._id }, process.env.JWT_SECRET_KEY);
 
-    // console.log("Token : ", token);
-
     res.cookie("token", token, {
       httpOnly: true,
+      secure: true,
+      sameSite: "none",
     });
-
-    // console.log("User Created Successfully");
 
     return responseHandler({
       res,
