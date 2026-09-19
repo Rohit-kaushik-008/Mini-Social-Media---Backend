@@ -31,7 +31,7 @@ export const getProfileStats = async (req, res) => {
     });
 
     const profileData = {
-      avatar:
+      profileImage:
         user?.profileImage ||
         "https://i.pinimg.com/736x/ce/ec/3d/ceec3ddfd13c0cd9374e499fbaa2119f.jpg",
       banner:
